@@ -1,0 +1,14 @@
+[
+  {
+    "id": "notif-1763903228158-hi409xv2e",
+    "userId": "petani-1763483912929",
+    "userType": "farmer",
+    "type": "new_order",
+    "title": "Pesanan Baru",
+    "message": "Anda mendapat pesanan baru dari Tamsil sebesar Rp 30.000",
+    "orderId": "order-1763903228142-jlwqxrxf7",
+    "read": true,
+    "createdAt": "2025-11-23T13:07:08.319Z",
+    "updatedAt": "2025-11-23T13:07:18.026Z"
+  }
+]

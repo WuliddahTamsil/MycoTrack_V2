@@ -1,0 +1,38 @@
+[
+  {
+    "id": "a1763906112358",
+    "title": "Jamur Kuping Monitoring: Sistem Cerdas untuk Memantau Budidaya Jamur Secara Real-Time",
+    "excerpt": "Jamur Kuping Monitoring adalah inovasi yang sangat membantu dalam meningkatkan kualitas budidaya jamur. Dengan pemantauan real-time, petani dapat menjaga kondisi kumbung tetap optimal, mengurangi risiko kegagalan, dan meningkatkan produktivitas panen. Sistem ini menjadi langkah awal menuju budidaya jamur berbasis teknologi modern dan berkelanjutan.",
+    "content": "1. Pendahuluan\nJamur kuping (Auricularia auricula-judae) merupakan salah satu jenis jamur konsumsi yang memiliki nilai ekonomi tinggi di Indonesia. Proses budidayanya membutuhkan kondisi lingkungan yang stabil, seperti suhu, kelembaban, dan sirkulasi udara yang tepat. Ketidakstabilan faktor-faktor tersebut dapat menyebabkan pertumbuhan jamur terhambat bahkan gagal panen.\nKarena itu, sistem Jamur Kuping Monitoring dikembangkan sebagai solusi untuk membantu petani jamur memantau kondisi kumbung secara real-time dan otomatis.\n\n2. Apa Itu Jamur Kuping Monitoring?\nJamur Kuping Monitoring adalah sistem pemantauan berbasis IoT (Internet of Things) yang berfungsi untuk mendeteksi dan mencatat kondisi lingkungan yang mempengaruhi pertumbuhan jamur kuping. Sistem ini biasanya dilengkapi dengan berbagai sensor seperti:\n- Sensor suhu (DHT22/DS18B20)\n- Sensor kelembaban udara\n- Sensor kelembaban media/tanah\n- Sensor cahaya (LDR)\n- Sensor CO₂ atau kualitas udara\n- Kamera monitoring (opsional)\nData dari sensor dikirim ke server atau aplikasi melalui WiFi sehingga petani dapat melihat kondisi kumbung kapan saja dan di mana saja.\n\n3. Cara Kerja Sistem\n- Sensor membaca kondisi lingkungan di sekitar kumbung jamur.\n- Data dikirim ke mikrokontroler (ESP8266/ESP32).\n- Mikrokontroler mengirim data ke database atau cloud (misalnya Firebase).\n- Aplikasi/web dashboard menampilkan data dalam bentuk grafik, angka, dan peringatan.\n- Jika kondisi lingkungan tidak sesuai standar, sistem dapat memberikan notifikasi ke pengguna.\n",
+    "author": "Wuliddah Tamsil Barokah",
+    "category": "Panduan",
+    "image": "https://asset.kompas.com/crops/Q3sSKrQ6qJ3SIuWIC2tMYvmXANY=/193x128:1727x1151/1200x800/data/photo/2021/11/10/618ab5823a2c1.jpg",
+    "date": "2025-11-23",
+    "createdAt": "2025-11-23T13:55:12.364Z",
+    "updatedAt": "2025-11-23T16:07:43.570Z"
+  },
+  {
+    "id": "a1",
+    "title": "Panduan Lengkap Budidaya Jamur Kuping untuk Pemula",
+    "excerpt": "Pelajari langkah-langkah mudah memulai budidaya jamur kuping dari nol hingga panen pertama.",
+    "content": "Artikel lengkap tentang budidaya jamur kuping untuk pemula. Mulai dari persiapan media tanam, inokulasi, inkubasi, hingga panen. Artikel ini akan membahas secara detail setiap tahapan budidaya jamur kuping dengan tips dan trik yang mudah dipahami.",
+    "image": "https://images.unsplash.com/photo-1735282260417-cb781d757604?w=400",
+    "author": "Dr. Agus Budiman",
+    "date": "2025-11-01",
+    "category": "Tutorial",
+    "createdAt": "2025-11-01T00:00:00.000Z",
+    "updatedAt": "2025-11-01T00:00:00.000Z"
+  },
+  {
+    "id": "a2",
+    "title": "Teknologi IoT dalam Budidaya Jamur Modern",
+    "excerpt": "Bagaimana sensor IoT membantu meningkatkan produktivitas dan kualitas jamur kuping.",
+    "content": "IoT mengubah cara budidaya jamur modern. Dengan sensor IoT, petani dapat memantau suhu, kelembaban, dan kondisi lingkungan secara real-time. Artikel ini membahas implementasi teknologi IoT dalam budidaya jamur kuping dan manfaatnya bagi produktivitas.",
+    "image": "https://images.unsplash.com/photo-1755719523098-227f4c486eb1?w=400",
+    "author": "Ir. Fitri Handayani",
+    "date": "2025-10-28",
+    "category": "Teknologi",
+    "createdAt": "2025-10-28T00:00:00.000Z",
+    "updatedAt": "2025-10-28T00:00:00.000Z"
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "eventType": "order_created",
+    "orderId": "order-1763903228142-jlwqxrxf7",
+    "customerId": "customer-1763816435104",
+    "farmerId": "petani-1763483912929",
+    "amount": 30000,
+    "productCount": 1,
+    "id": "analytics-1763903228323-taiv9b2ms",
+    "timestamp": "2025-11-23T13:07:08.323Z"
+  },
+  {
+    "eventType": "payment_completed",
+    "orderId": "order-1763903228142-jlwqxrxf7",
+    "customerId": "customer-1763816435104",
+    "farmerId": "petani-1763483912929",
+    "amount": 30000,
+    "paymentMethod": "QRIS",
+    "id": "analytics-1763903228376-jgaw2yfj6",
+    "timestamp": "2025-11-23T13:07:08.376Z"
+  }
+]

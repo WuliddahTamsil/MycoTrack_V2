@@ -1,0 +1,429 @@
+[
+  {
+    "id": "gallery-1763820990622-q803saz82",
+    "farmerId": "petani-1763483912929",
+    "url": "/uploads/image-1763820990291-655507844.jpg",
+    "annotatedUrl": "/uploads/annotated-image-1763820990291-655507844.jpg",
+    "title": "Deteksi Jamur - 22/11/2025",
+    "description": "",
+    "date": "2025-11-22",
+    "baglogId": "Baglog #1",
+    "stage": "Panen",
+    "tags": [],
+    "detections": {
+      "summary": {
+        "Matang": 3,
+        "Muda": 0,
+        "Primordia": 0
+      },
+      "total": 3,
+      "details": [
+        {
+          "bbox": [
+            448,
+            202,
+            660,
+            451
+          ],
+          "class": "Matang",
+          "confidence": 0.4208948314189911,
+          "harvest_days": 0
+        },
+        {
+          "bbox": [
+            225,
+            221,
+            628,
+            464
+          ],
+          "class": "Matang",
+          "confidence": 0.34132063388824463,
+          "harvest_days": 0
+        },
+        {
+          "bbox": [
+            263,
+            0,
+            469,
+            220
+          ],
+          "class": "Matang",
+          "confidence": 0.316351979970932,
+          "harvest_days": 0
+        }
+      ]
+    },
+    "createdAt": "2025-11-22T14:16:30.623Z"
+  },
+  {
+    "id": "gallery-1763821432953-2pu4lvt3h",
+    "farmerId": "petani-1763483912929",
+    "url": "/uploads/image-1763821432566-984436642.jpg",
+    "annotatedUrl": "/uploads/annotated-image-1763821432566-984436642.jpg",
+    "title": "Deteksi Jamur #2",
+    "description": "banyak variasi masih menunggu masa panen",
+    "date": "2025-11-22",
+    "baglogId": "Baglog #2",
+    "stage": "Panen",
+    "tags": [],
+    "detections": {
+      "summary": {
+        "Matang": 3,
+        "Muda": 1,
+        "Primordia": 0
+      },
+      "total": 4,
+      "details": [
+        {
+          "bbox": [
+            18,
+            121,
+            216,
+            350
+          ],
+          "class": "Matang",
+          "confidence": 0.6841001510620117,
+          "harvest_days": 0
+        },
+        {
+          "bbox": [
+            445,
+            254,
+            638,
+            440
+          ],
+          "class": "Matang",
+          "confidence": 0.6130349040031433,
+          "harvest_days": 0
+        },
+        {
+          "bbox": [
+            24,
+            505,
+            137,
+            637
+          ],
+          "class": "Muda",
+          "confidence": 0.43819284439086914,
+          "harvest_days": 2
+        },
+        {
+          "bbox": [
+            369,
+            100,
+            540,
+            280
+          ],
+          "class": "Matang",
+          "confidence": 0.2816371023654938,
+          "harvest_days": 0
+        }
+      ]
+    },
+    "createdAt": "2025-11-22T14:23:52.953Z"
+  },
+  {
+    "id": "gallery-1763821433713-8mer36h9y",
+    "farmerId": "petani-1763483912929",
+    "url": "/uploads/image-1763821433310-916135910.jpg",
+    "annotatedUrl": "/uploads/annotated-image-1763821433310-916135910.jpg",
+    "title": "Deteksi Jamur - 22/11/2025",
+    "description": "",
+    "date": "2025-11-22",
+    "baglogId": "Baglog #1",
+    "stage": "Panen",
+    "tags": [],
+    "detections": {
+      "summary": {
+        "Matang": 3,
+        "Muda": 1,
+        "Primordia": 0
+      },
+      "total": 4,
+      "details": [
+        {
+          "bbox": [
+            18,
+            121,
+            216,
+            350
+          ],
+          "class": "Matang",
+          "confidence": 0.6841001510620117,
+          "harvest_days": 0
+        },
+        {
+          "bbox": [
+            445,
+            254,
+            638,
+            440
+          ],
+          "class": "Matang",
+          "confidence": 0.6130349040031433,
+          "harvest_days": 0
+        },
+        {
+          "bbox": [
+            24,
+            505,
+            137,
+            637
+          ],
+          "class": "Muda",
+          "confidence": 0.43819284439086914,
+          "harvest_days": 2
+        },
+        {
+          "bbox": [
+            369,
+            100,
+            540,
+            280
+          ],
+          "class": "Matang",
+          "confidence": 0.2816371023654938,
+          "harvest_days": 0
+        }
+      ]
+    },
+    "createdAt": "2025-11-22T14:23:53.713Z"
+  },
+  {
+    "id": "gallery-1763823923937-me9zf5e65",
+    "farmerId": "petani-1763483912929",
+    "url": "/uploads/image-1763823923476-887237689.jpg",
+    "annotatedUrl": "/uploads/annotated-image-1763823923476-887237689.jpg",
+    "title": "Baglog #2",
+    "description": "ada kombinasi fase pertumbuhan jamur",
+    "date": "2025-11-22",
+    "baglogId": "Baglog #3",
+    "stage": "Pertumbuhan",
+    "tags": [
+      "Primordia"
+    ],
+    "detections": {
+      "summary": {
+        "Matang": 1,
+        "Muda": 2,
+        "Primordia": 4
+      },
+      "total": 7,
+      "details": [
+        {
+          "bbox": [
+            348,
+            389,
+            506,
+            500
+          ],
+          "class": "Muda",
+          "confidence": 0.5103517174720764,
+          "harvest_days": 2
+        },
+        {
+          "bbox": [
+            39,
+            476,
+            54,
+            483
+          ],
+          "class": "Primordia",
+          "confidence": 0.4829172194004059,
+          "harvest_days": 4
+        },
+        {
+          "bbox": [
+            45,
+            535,
+            72,
+            553
+          ],
+          "class": "Primordia",
+          "confidence": 0.4368234872817993,
+          "harvest_days": 4
+        },
+        {
+          "bbox": [
+            44,
+            536,
+            72,
+            552
+          ],
+          "class": "Muda",
+          "confidence": 0.36740824580192566,
+          "harvest_days": 2
+        },
+        {
+          "bbox": [
+            149,
+            451,
+            160,
+            458
+          ],
+          "class": "Primordia",
+          "confidence": 0.3522736728191376,
+          "harvest_days": 4
+        },
+        {
+          "bbox": [
+            349,
+            391,
+            506,
+            492
+          ],
+          "class": "Matang",
+          "confidence": 0.26899391412734985,
+          "harvest_days": 0
+        },
+        {
+          "bbox": [
+            165,
+            493,
+            186,
+            508
+          ],
+          "class": "Primordia",
+          "confidence": 0.24826239049434662,
+          "harvest_days": 4
+        }
+      ]
+    },
+    "createdAt": "2025-11-22T15:05:23.937Z"
+  },
+  {
+    "id": "gallery-1763827351266-d3crg4en7",
+    "farmerId": "petani-1763648620022",
+    "url": "/uploads/image-1763827350931-822803519.jpg",
+    "annotatedUrl": "/uploads/annotated-image-1763827350931-822803519.jpg",
+    "title": "Jamur Matang Siap Panen",
+    "description": "Pertumbuhan Bagus",
+    "date": "2025-11-22",
+    "baglogId": "Baglog #4",
+    "stage": "Panen",
+    "tags": [
+      "Panen"
+    ],
+    "detections": {
+      "summary": {
+        "Matang": 10,
+        "Muda": 0,
+        "Primordia": 0
+      },
+      "total": 10,
+      "details": [
+        {
+          "bbox": [
+            868,
+            140,
+            998,
+            246
+          ],
+          "class": "Matang",
+          "confidence": 0.9100924730300903,
+          "harvest_days": 0
+        },
+        {
+          "bbox": [
+            566,
+            275,
+            695,
+            412
+          ],
+          "class": "Matang",
+          "confidence": 0.8041820526123047,
+          "harvest_days": 0
+        },
+        {
+          "bbox": [
+            831,
+            237,
+            923,
+            304
+          ],
+          "class": "Matang",
+          "confidence": 0.7521320581436157,
+          "harvest_days": 0
+        },
+        {
+          "bbox": [
+            331,
+            366,
+            466,
+            509
+          ],
+          "class": "Matang",
+          "confidence": 0.7481674551963806,
+          "harvest_days": 0
+        },
+        {
+          "bbox": [
+            809,
+            173,
+            948,
+            261
+          ],
+          "class": "Matang",
+          "confidence": 0.7361253499984741,
+          "harvest_days": 0
+        },
+        {
+          "bbox": [
+            456,
+            286,
+            632,
+            446
+          ],
+          "class": "Matang",
+          "confidence": 0.7328401207923889,
+          "harvest_days": 0
+        },
+        {
+          "bbox": [
+            701,
+            228,
+            866,
+            385
+          ],
+          "class": "Matang",
+          "confidence": 0.6696841716766357,
+          "harvest_days": 0
+        },
+        {
+          "bbox": [
+            321,
+            445,
+            418,
+            521
+          ],
+          "class": "Matang",
+          "confidence": 0.4130220115184784,
+          "harvest_days": 0
+        },
+        {
+          "bbox": [
+            436,
+            432,
+            491,
+            490
+          ],
+          "class": "Matang",
+          "confidence": 0.35208073258399963,
+          "harvest_days": 0
+        },
+        {
+          "bbox": [
+            123,
+            408,
+            335,
+            660
+          ],
+          "class": "Matang",
+          "confidence": 0.29082876443862915,
+          "harvest_days": 0
+        }
+      ]
+    },
+    "createdAt": "2025-11-22T16:02:31.266Z"
+  }
+]
