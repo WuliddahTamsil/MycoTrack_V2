@@ -5,16 +5,22 @@ const path = require('path');
 const multer = require('multer');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware
+// CORS configuration - support both local and production
+const corsOrigins = process.env.CORS_ORIGIN 
+  ? process.env.CORS_ORIGIN.split(',')
+  : [
+      'http://localhost:5173',
+      'http://localhost:5174',
+      'http://127.0.0.1:5173',
+      'http://127.0.0.1:5174',
+      'https://*.vercel.app'
+    ];
+
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'http://127.0.0.1:5173',
-    'http://127.0.0.1:5174'
-  ],
+  origin: corsOrigins,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -3670,78 +3676,83 @@ app.use((req, res) => {
   });
 });
 
-// Start server
-const server = app.listen(PORT, () => {
-  console.log('='.repeat(50));
-  console.log(`✅ Backend server running on http://localhost:${PORT}`);
-  console.log(`✅ Health check: http://localhost:${PORT}/api/health`);
-  console.log('='.repeat(50));
-  console.log('Endpoints available:');
-  console.log('  POST /api/customer/register');
-  console.log('  POST /api/customer/login');
-  console.log('  POST /api/petani/register');
-  console.log('  POST /api/petani/login');
-  console.log('  POST /api/admin/login');
-  console.log('  GET  /api/admin/users/customers');
-  console.log('  GET  /api/admin/users/petanis');
-  console.log('  GET  /api/admin/users/customers/:id');
-  console.log('  GET  /api/admin/users/petanis/:id');
-  console.log('  PUT  /api/admin/users/customers/:id');
-  console.log('  PUT  /api/admin/users/customers/:id/status');
-  console.log('  PUT  /api/admin/users/petanis/:id');
-  console.log('  PUT  /api/admin/users/petanis/:id/status');
-  console.log('  DELETE /api/admin/users/customers/:id');
-  console.log('  DELETE /api/admin/users/petanis/:id');
-  console.log('  GET  /api/admin/logs');
-  console.log('  GET  /api/products');
-  console.log('  GET  /api/products/:id');
-  console.log('  GET  /api/petani/products');
-  console.log('  POST /api/petani/products');
-  console.log('  PUT  /api/petani/products/:id');
-  console.log('  DELETE /api/petani/products/:id');
-  console.log('  GET  /api/customer/cart');
-  console.log('  POST /api/customer/cart');
-  console.log('  PUT  /api/customer/cart/:id');
-  console.log('  DELETE /api/customer/cart/:id');
-  console.log('  GET  /api/customer/orders');
-  console.log('  GET  /api/farmer/orders');
-  console.log('  GET  /api/orders/:id');
-  console.log('  POST /api/orders');
-  console.log('  PUT  /api/orders/:id/status');
-  console.log('  PUT  /api/orders/:id/payment');
-  console.log('  GET  /api/forum/posts');
-  console.log('  GET  /api/forum/posts/:id');
-  console.log('  POST /api/forum/posts');
-  console.log('  PUT  /api/forum/posts/:id');
-  console.log('  DELETE /api/forum/posts/:id');
-  console.log('  POST /api/forum/posts/:id/like');
-  console.log('  POST /api/forum/posts/:id/comments');
-  console.log('  PUT  /api/forum/posts/:postId/comments/:commentId');
-  console.log('  DELETE /api/forum/posts/:postId/comments/:commentId');
-  console.log('  GET  /api/health');
-  console.log('='.repeat(50));
-}).on('error', (err) => {
-  console.error('='.repeat(50));
-  console.error('❌ ERROR STARTING SERVER');
-  console.error('='.repeat(50));
-  if (err.code === 'EADDRINUSE') {
-    console.error(`Port ${PORT} is already in use.`);
-    console.error('Please stop the other server or change the port.');
-    console.error('To find what is using port 3000:');
-    console.error('  Windows: netstat -ano | findstr :3000');
-    console.error('  Mac/Linux: lsof -i :3000');
-  } else {
-    console.error('Error:', err.message);
-  }
-  console.error('='.repeat(50));
-  process.exit(1);
-});
+// Export app for Vercel/serverless (if needed)
+module.exports = app;
 
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('SIGTERM signal received: closing HTTP server');
-  server.close(() => {
-    console.log('HTTP server closed');
+// Start server (only if running directly, not as module)
+if (require.main === module) {
+  const server = app.listen(PORT, () => {
+    console.log('='.repeat(50));
+    console.log(`✅ Backend server running on http://localhost:${PORT}`);
+    console.log(`✅ Health check: http://localhost:${PORT}/api/health`);
+    console.log('='.repeat(50));
+    console.log('Endpoints available:');
+    console.log('  POST /api/customer/register');
+    console.log('  POST /api/customer/login');
+    console.log('  POST /api/petani/register');
+    console.log('  POST /api/petani/login');
+    console.log('  POST /api/admin/login');
+    console.log('  GET  /api/admin/users/customers');
+    console.log('  GET  /api/admin/users/petanis');
+    console.log('  GET  /api/admin/users/customers/:id');
+    console.log('  GET  /api/admin/users/petanis/:id');
+    console.log('  PUT  /api/admin/users/customers/:id');
+    console.log('  PUT  /api/admin/users/customers/:id/status');
+    console.log('  PUT  /api/admin/users/petanis/:id');
+    console.log('  PUT  /api/admin/users/petanis/:id/status');
+    console.log('  DELETE /api/admin/users/customers/:id');
+    console.log('  DELETE /api/admin/users/petanis/:id');
+    console.log('  GET  /api/admin/logs');
+    console.log('  GET  /api/products');
+    console.log('  GET  /api/products/:id');
+    console.log('  GET  /api/petani/products');
+    console.log('  POST /api/petani/products');
+    console.log('  PUT  /api/petani/products/:id');
+    console.log('  DELETE /api/petani/products/:id');
+    console.log('  GET  /api/customer/cart');
+    console.log('  POST /api/customer/cart');
+    console.log('  PUT  /api/customer/cart/:id');
+    console.log('  DELETE /api/customer/cart/:id');
+    console.log('  GET  /api/customer/orders');
+    console.log('  GET  /api/farmer/orders');
+    console.log('  GET  /api/orders/:id');
+    console.log('  POST /api/orders');
+    console.log('  PUT  /api/orders/:id/status');
+    console.log('  PUT  /api/orders/:id/payment');
+    console.log('  GET  /api/forum/posts');
+    console.log('  GET  /api/forum/posts/:id');
+    console.log('  POST /api/forum/posts');
+    console.log('  PUT  /api/forum/posts/:id');
+    console.log('  DELETE /api/forum/posts/:id');
+    console.log('  POST /api/forum/posts/:id/like');
+    console.log('  POST /api/forum/posts/:id/comments');
+    console.log('  PUT  /api/forum/posts/:postId/comments/:commentId');
+    console.log('  DELETE /api/forum/posts/:postId/comments/:commentId');
+    console.log('  GET  /api/health');
+    console.log('='.repeat(50));
+  }).on('error', (err) => {
+    console.error('='.repeat(50));
+    console.error('❌ ERROR STARTING SERVER');
+    console.error('='.repeat(50));
+    if (err.code === 'EADDRINUSE') {
+      console.error(`Port ${PORT} is already in use.`);
+      console.error('Please stop the other server or change the port.');
+      console.error('To find what is using port 3000:');
+      console.error('  Windows: netstat -ano | findstr :3000');
+      console.error('  Mac/Linux: lsof -i :3000');
+    } else {
+      console.error('Error:', err.message);
+    }
+    console.error('='.repeat(50));
+    process.exit(1);
   });
-});
+
+  // Graceful shutdown
+  process.on('SIGTERM', () => {
+    console.log('SIGTERM signal received: closing HTTP server');
+    server.close(() => {
+      console.log('HTTP server closed');
+    });
+  });
+}
 

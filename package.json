@@ -1,0 +1,24 @@
+{
+  "name": "mycotrack-v2",
+  "version": "1.0.0",
+  "description": "MycoTrack - Sistem Monitoring dan Manajemen Budidaya Jamur Kuping",
+  "scripts": {
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm start",
+    "dev:ml": "cd \"machine learning/Project\" && python ml_api_service.py",
+    "build:frontend": "cd frontend && npm install && npm run build",
+    "install:all": "cd frontend && npm install && cd ../backend && npm install",
+    "deploy:vercel": "vercel --prod"
+  },
+  "keywords": [
+    "mycotrack",
+    "mushroom",
+    "monitoring",
+    "react",
+    "nodejs",
+    "machine-learning"
+  ],
+  "author": "",
+  "license": "ISC"
+}
+

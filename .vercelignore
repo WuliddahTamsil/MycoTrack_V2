@@ -1,0 +1,18 @@
+node_modules
+.git
+.env
+.env.local
+*.log
+.DS_Store
+backend/node_modules
+backend/uploads
+backend/venv
+machine learning/Project/.venv
+machine learning/Project/__pycache__
+machine learning/Project/runs
+machine learning/Project/output
+*.pt
+*.pth
+venv
+.venv
+
