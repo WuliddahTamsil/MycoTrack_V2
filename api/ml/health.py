@@ -2,7 +2,7 @@
 Vercel serverless function for ML service health check
 """
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify  # type: ignore
 
 app = Flask(__name__)
 

@@ -3,17 +3,17 @@ Flask API Service untuk ML Detection
 Endpoint untuk deteksi fase pertumbuhan jamur menggunakan YOLOv5
 """
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify  # type: ignore
 try:
-    from flask_cors import CORS
+    from flask_cors import CORS  # type: ignore
     cors_available = True
 except ImportError:
     print("[WARNING] flask_cors not installed. CORS may not work properly.")
     print("[INFO] Install with: pip install flask-cors")
     cors_available = False
-import torch
-import cv2
-import numpy as np
+import torch  # type: ignore
+import cv2  # type: ignore
+import numpy as np  # type: ignore
 from pathlib import Path
 import base64
 from datetime import datetime, timedelta
@@ -76,6 +76,8 @@ def load_model():
             print(f"[INFO] Model loaded successfully!")
             print(f"[INFO] Confidence threshold: {CONFIDENCE_THRESHOLD}")
             print(f"[INFO] IoU threshold: 0.45")
+            print(f"[INFO] Model classes: {model.names}")
+            print(f"[INFO] Model device: {next(model.parameters()).device}")
         except Exception as e:
             print(f"❌ Error loading model: {e}")
             raise
@@ -190,8 +192,14 @@ def detect():
         image = base64_to_image(image_base64)
         
         # Run detection
+        print(f"[DETECT] Running inference on image shape: {image.shape}")
         results = model(image)
         df = results.pandas().xyxy[0]
+        
+        print(f"[DETECT] Raw detections from model: {len(df)} detections")
+        if len(df) > 0:
+            print(f"[DETECT] Detection details:")
+            print(df[['name', 'confidence', 'xmin', 'ymin', 'xmax', 'ymax']].head())
         
         # Process detections
         detections = []
@@ -202,6 +210,8 @@ def detect():
             conf = float(row['confidence'])
             raw_name = row['name']
             cls_name = LABEL_MAP.get(raw_name, raw_name)
+            
+            print(f"[DETECT] Processing: {raw_name} -> {cls_name}, conf: {conf:.3f}, bbox: [{x1}, {y1}, {x2}, {y2}]")
             
             harvest_days = HARVEST_ESTIMATION.get(cls_name, 0)
             
@@ -214,6 +224,9 @@ def detect():
             
             if cls_name in summary:
                 summary[cls_name] += 1
+        
+        print(f"[DETECT] Processed {len(detections)} detections")
+        print(f"[DETECT] Summary: {summary}")
         
         # Prepare response
         response = {
@@ -263,8 +276,14 @@ def detect_upload():
             return jsonify({'error': 'Invalid image file'}), 400
         
         # Run detection
+        print(f"[DETECT/UPLOAD] Running inference on image shape: {image.shape}")
         results = model(image)
         df = results.pandas().xyxy[0]
+        
+        print(f"[DETECT/UPLOAD] Raw detections from model: {len(df)} detections")
+        if len(df) > 0:
+            print(f"[DETECT/UPLOAD] Detection details:")
+            print(df[['name', 'confidence', 'xmin', 'ymin', 'xmax', 'ymax']].head())
         
         # Process detections
         detections = []
@@ -275,6 +294,8 @@ def detect_upload():
             conf = float(row['confidence'])
             raw_name = row['name']
             cls_name = LABEL_MAP.get(raw_name, raw_name)
+            
+            print(f"[DETECT/UPLOAD] Processing: {raw_name} -> {cls_name}, conf: {conf:.3f}, bbox: [{x1}, {y1}, {x2}, {y2}]")
             
             harvest_days = HARVEST_ESTIMATION.get(cls_name, 0)
             
@@ -287,6 +308,9 @@ def detect_upload():
             
             if cls_name in summary:
                 summary[cls_name] += 1
+        
+        print(f"[DETECT/UPLOAD] Processed {len(detections)} detections")
+        print(f"[DETECT/UPLOAD] Summary: {summary}")
         
         # Draw detections on image
         img_with_boxes = draw_detections(image, detections)

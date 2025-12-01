@@ -2,9 +2,8 @@
 Program Utama: Deteksi Real-time Jamur dengan YOLOv5
 """
 
-import torch
-import cv2
-import numpy as np
+import torch  # type: ignore
+import cv2  # type: ignore
 import time
 from pathlib import Path
 
@@ -16,7 +15,7 @@ except ImportError:
     MODEL_PATH = "C:\\Users\\USER\\Documents\\SCHOOL STUFF\\Semester 5\\Pembelajaran Mesin\\Project\\weights\\best.pt"
     WEBCAM_INDEX = 0
     IMG_SIZE = 640
-    CONFIDENCE_THRESHOLD = 0.25
+    CONFIDENCE_THRESHOLD = 0.15
     CLASS_NAMES = ['Primordia', 'Muda', 'Matang']
     HARVEST_ESTIMATION = {'Primordia': 4, 'Muda': 2, 'Matang': 0}
     CLASS_COLORS = {
@@ -41,7 +40,7 @@ LABEL_MAP = {
 # FUNGSI UTAMA
 # ============================================================
 
-def load_model(model_path=MODEL_PATH):
+def load_model(model_path=None):
     """
     Load YOLOv5 model dari file .pt
     
@@ -51,6 +50,9 @@ def load_model(model_path=MODEL_PATH):
     Returns:
         model: YOLOv5 model yang sudah di-load
     """
+    if model_path is None:
+        model_path = MODEL_PATH
+    
     print(f"[INFO] Loading model: {model_path}")
     
     if not Path(model_path).exists():
@@ -190,7 +192,7 @@ def draw_info_panel(frame, detections):
     Returns:
         frame: Frame dengan info panel
     """
-    h, w = frame.shape[:2]
+    w = frame.shape[1]
     
     # Count detections per class
     counts = {name: 0 for name in CLASS_NAMES}
@@ -288,7 +290,9 @@ def main():
             frame_count += 1
             if frame_count % 10 == 0:
                 end_time = time.time()
-                fps = 10 / (end_time - start_time)
+                elapsed = end_time - start_time
+                if elapsed > 0:
+                    fps = 10 / elapsed
                 start_time = time.time()
             
             # Draw FPS

@@ -64,7 +64,7 @@
     "address": "Dusun Ciuyah RT/RW 09/03 Desa Ciniru Kecamatan Ciniru Kabupaten Kuningan Provinsi Jawa Barat",
     "ktpPhoto": "http://localhost:3000/uploads/ktpPhoto-1763649240307-823595138.png",
     "role": "petani",
-    "balance": 0,
+    "balance": 38500,
     "status": "accepted",
     "adminMessage": null,
     "shop": {

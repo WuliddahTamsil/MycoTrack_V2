@@ -1,0 +1,23 @@
+{
+  "include": [
+    "."
+  ],
+  "exclude": [
+    "**/__pycache__",
+    "**/node_modules",
+    "**/yolov5",
+    "**/runs",
+    "**/output",
+    "**/weights",
+    "**/venv",
+    "**/.venv"
+  ],
+  "reportMissingImports": "none",
+  "reportMissingTypeStubs": "none",
+  "reportUnusedImport": "none",
+  "pythonVersion": "3.8",
+  "typeCheckingMode": "off",
+  "venvPath": ".",
+  "venv": "venv"
+}
+

@@ -179,5 +179,39 @@
     ],
     "createdAt": "2025-11-23T13:07:08.142Z",
     "updatedAt": "2025-11-23T14:07:05.306Z"
+  },
+  {
+    "id": "order-1764564615871-n1qohpep0",
+    "customerId": "customer-1763482547446",
+    "customerName": "Wuliddah Tamsil",
+    "farmerId": "petani-1763649240326",
+    "farmerName": "Petani3",
+    "products": [
+      {
+        "productId": "product-1764500617818",
+        "name": "Jamur Kuping Super",
+        "quantity": 1,
+        "price": 23500
+      }
+    ],
+    "total": 38500,
+    "status": "pending",
+    "paymentStatus": "paid",
+    "paymentMethod": "Saldo MycoTrack",
+    "shippingAddress": "Dusun Ciuyah RT/RW 09/03 Desa Ciniru Kecamatan Ciniru Kabupaten Kuningan Provinsi Jawa Barat",
+    "tracking": [
+      {
+        "status": "pending",
+        "message": "Pesanan dibuat",
+        "timestamp": "2025-12-01T04:50:15.872Z"
+      },
+      {
+        "status": "paid",
+        "message": "Pembayaran berhasil dengan saldo MycoTrack",
+        "timestamp": "2025-12-01T04:50:15.917Z"
+      }
+    ],
+    "createdAt": "2025-12-01T04:50:15.872Z",
+    "updatedAt": "2025-12-01T04:50:16.186Z"
   }
 ]

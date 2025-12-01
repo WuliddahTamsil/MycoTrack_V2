@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Shell, TrendingUp, Zap, ChevronDown, Mail, Phone, MapPin, Instagram, MessageCircle, Sparkles, Activity, CheckCircle2, X, ChevronLeft, ChevronRight, HelpCircle, Wifi, Brain, CreditCard, DollarSign, Shield, Smartphone, BarChart3, Users, Clock, Settings, Globe, Award } from 'lucide-react';
+import { ArrowRight, Shell, TrendingUp, Zap, ChevronDown, Mail, Phone, MapPin, Instagram, MessageCircle, Sparkles, Activity, CheckCircle2, X, ChevronLeft, ChevronRight, HelpCircle, Wifi, Brain, CreditCard, DollarSign, Shield, Smartphone, BarChart3, Users, Clock, Settings, Globe } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
-import { Input } from './ui/input';
-import { mockArticles, Article } from './mockData';
+import { mockArticles } from './mockData';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 
 export const LandingPage: React.FC = () => {
@@ -188,7 +186,7 @@ export const LandingPage: React.FC = () => {
                 Budidaya Jamur Kuping Lebih Cerdas dengan Teknologi Modern
               </p>
               <p className="text-lg mb-10 text-[#5A4A32] max-w-2xl leading-relaxed font-medium">
-                Monitoring real-time, analisis AI, dan marketplace terintegrasi untuk meningkatkan produktivitas budidaya jamur Anda hingga 300%
+                Monitoring real-time, analisis AI, dan marketplace terintegrasi untuk meningkatkan produktivitas budidaya jamur Anda hingga 100%
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4">

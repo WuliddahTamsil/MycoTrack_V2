@@ -48,5 +48,29 @@
     "paymentMethod": "QRIS",
     "id": "ledger-1763816564662-mgo1491pt",
     "timestamp": "2025-11-22T13:02:44.662Z"
+  },
+  {
+    "type": "debit",
+    "userId": "customer-1763482547446",
+    "userType": "customer",
+    "amount": -38500,
+    "balanceBefore": 315000,
+    "balanceAfter": 276500,
+    "orderId": "order-1764564615871-n1qohpep0",
+    "description": "Pembayaran pesanan Jamur Kuping Super × 1 ke Petani3 pada 1 Des 2025",
+    "id": "ledger-1764564615905-ez2ent6v7",
+    "timestamp": "2025-12-01T04:50:15.905Z"
+  },
+  {
+    "type": "credit",
+    "userId": "petani-1763649240326",
+    "userType": "farmer",
+    "amount": 38500,
+    "balanceBefore": 0,
+    "balanceAfter": 38500,
+    "orderId": "order-1764564615871-n1qohpep0",
+    "description": "Orderan masuk Jamur Kuping Super × 1 dari Wuliddah Tamsil pada 1 Des 2025",
+    "id": "ledger-1764564615908-oipuz4a5d",
+    "timestamp": "2025-12-01T04:50:15.908Z"
   }
 ]

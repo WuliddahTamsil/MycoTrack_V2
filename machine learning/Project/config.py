@@ -26,7 +26,7 @@ WEBCAM_INDEX = 0  # 0 = default webcam, 1 = external webcam
 IMG_SIZE = 640  # 640x640 (default YOLOv5)
 
 # Confidence threshold
-CONFIDENCE_THRESHOLD = 0.20  # ✅ Turunkan untuk deteksi lebih sensitif (semakin rendah = lebih banyak deteksi)
+CONFIDENCE_THRESHOLD = 0.15  # ✅ Turunkan untuk deteksi lebih sensitif (semakin rendah = lebih banyak deteksi)
 
 # ============================================================
 # CLASS CONFIGURATION
