@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { toast } from 'sonner';
 import { ImageWithFallback } from '../figma/ImageWithFallback';
 import { useAuth } from '../AuthContext';
+import { getApiUrl, getUploadUrl } from '../../config/api';
 
 interface GalleryImage {
   id: string;
@@ -127,16 +128,14 @@ export const GrowthGallery: React.FC = () => {
       
       setIsLoading(true);
       try {
-        const response = await fetch(`http://localhost:3000/api/gallery/images?farmerId=${user.id}`);
+        const response = await fetch(getApiUrl(`gallery/images?farmerId=${user.id}`));
         if (response.ok) {
           const data = await response.json();
           // Convert API URLs to full URLs
           const imagesWithUrls = data.images.map((img: any) => ({
             ...img,
-            url: img.url.startsWith('http') ? img.url : `http://localhost:3000${img.url}`,
-            annotatedUrl: img.annotatedUrl ? 
-              (img.annotatedUrl.startsWith('http') ? img.annotatedUrl : `http://localhost:3000${img.annotatedUrl}`) :
-              undefined
+            url: getUploadUrl(img.url),
+            annotatedUrl: img.annotatedUrl ? getUploadUrl(img.annotatedUrl) : undefined
           }));
           setImages(imagesWithUrls);
         } else {
@@ -176,7 +175,7 @@ export const GrowthGallery: React.FC = () => {
       formData.append('baglogId', newImage.baglogId);
       formData.append('tags', newImage.tags);
 
-      const response = await fetch('http://localhost:3000/api/gallery/images', {
+      const response = await fetch(getApiUrl('gallery/images'), {
         method: 'POST',
         body: formData
       });
@@ -190,10 +189,8 @@ export const GrowthGallery: React.FC = () => {
       // Add new image to list
       const newImg: GalleryImage = {
         ...data.image,
-        url: data.image.url.startsWith('http') ? data.image.url : `http://localhost:3000${data.image.url}`,
-        annotatedUrl: data.image.annotatedUrl ? 
-          (data.image.annotatedUrl.startsWith('http') ? data.image.annotatedUrl : `http://localhost:3000${data.image.annotatedUrl}`) :
-          undefined
+        url: getUploadUrl(data.image.url),
+        annotatedUrl: data.image.annotatedUrl ? getUploadUrl(data.image.annotatedUrl) : undefined
     };
 
       setImages([newImg, ...images]);
@@ -208,7 +205,7 @@ export const GrowthGallery: React.FC = () => {
 
   const handleDeleteImage = async (id: string) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/gallery/images/${id}`, {
+      const response = await fetch(getApiUrl(`gallery/images/${id}`), {
         method: 'DELETE'
       });
 

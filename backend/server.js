@@ -14,8 +14,14 @@ const corsOrigins = process.env.CORS_ORIGIN
   : [
       'http://localhost:5173',
       'http://localhost:5174',
+      'http://localhost:5175',
+      'http://localhost:5176',
+      'http://localhost:5177',
       'http://127.0.0.1:5173',
       'http://127.0.0.1:5174',
+      'http://127.0.0.1:5175',
+      'http://127.0.0.1:5176',
+      'http://127.0.0.1:5177',
       'https://*.vercel.app'
     ];
 
@@ -3412,7 +3418,7 @@ app.post('/api/ml/detect', upload.single('image'), async (req, res) => {
           image: req.body.image,
           return_image: req.body.return_image || true
         }, {
-          timeout: 30000 // 30 seconds timeout
+          timeout: 60000 // 60 seconds timeout (model loading butuh waktu)
         });
         return res.json(response.data);
       }
@@ -3429,7 +3435,7 @@ app.post('/api/ml/detect', upload.single('image'), async (req, res) => {
     console.log('[ML DETECT] Sending to ML service:', `${ML_SERVICE_URL}/detect/upload`);
     const response = await axios.post(`${ML_SERVICE_URL}/detect/upload`, formData, {
       headers: formData.getHeaders(),
-      timeout: 30000 // 30 seconds timeout
+      timeout: 60000 // 60 seconds timeout (model loading butuh waktu)
     });
     
     console.log('[ML DETECT] ML service responded successfully');
@@ -3544,7 +3550,8 @@ app.post('/api/gallery/images', upload.single('image'), async (req, res) => {
       formData.append('image', fs.createReadStream(req.file.path));
       
       const mlResponse = await axios.post(`${ML_SERVICE_URL}/detect/upload`, formData, {
-        headers: formData.getHeaders()
+        headers: formData.getHeaders(),
+        timeout: 60000 // 60 seconds timeout
       });
       
       detectionResults = mlResponse.data;

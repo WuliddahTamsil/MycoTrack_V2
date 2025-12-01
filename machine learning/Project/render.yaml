@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: mycotrack-ml-service
+    env: python
+    rootDir: machine learning/Project
+    buildCommand: pip install -r requirements_ml_api.txt
+    startCommand: python ml_api_service.py
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: MODEL_PATH
+        value: weights/best.pt
+

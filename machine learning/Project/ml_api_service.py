@@ -360,5 +360,7 @@ if __name__ == '__main__':
     print("   Press CTRL+C to stop the service\n")
     print("="*70 + "\n")
     
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # Get port from environment variable (for Railway/Render)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)
 

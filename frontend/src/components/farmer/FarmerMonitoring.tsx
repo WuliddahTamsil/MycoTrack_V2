@@ -12,6 +12,7 @@ import { useAuth } from '../AuthContext';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { toast } from 'sonner';
+import { getMlApiUrl, getApiUrl } from '../../config/api';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Textarea } from '../ui/textarea';
@@ -236,8 +237,8 @@ export const FarmerMonitoring: React.FC = () => {
       
       formData.append('image', blob, 'image.jpg');
 
-      console.log('Sending to ML API:', 'http://localhost:3000/api/ml/detect');
-      const res = await fetch('http://localhost:3000/api/ml/detect', {
+      console.log('Sending to ML API:', getMlApiUrl('detect'));
+      const res = await fetch(getMlApiUrl('detect'), {
         method: 'POST',
         body: formData
       });
@@ -346,7 +347,7 @@ export const FarmerMonitoring: React.FC = () => {
       formData.append('baglogId', saveForm.baglogId);
       formData.append('tags', saveForm.tags);
 
-      const res = await fetch('http://localhost:3000/api/gallery/images', {
+      const res = await fetch(getApiUrl('gallery/images'), {
         method: 'POST',
         body: formData
       });

@@ -7,8 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { useAuth } from '../AuthContext';
 import { toast } from 'sonner';
 import { useNotificationContext } from '../NotificationContext';
-
-const API_BASE_URL = 'http://localhost:3000/api';
+import { API_BASE_URL } from '../../config/api';
 
 interface Notification {
   id: string;

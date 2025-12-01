@@ -9,8 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Wallet, Plus, ArrowUpDown, ArrowDown, Upload, Loader2 } from 'lucide-react';
 import { useAuth } from '../AuthContext';
 import { toast } from 'sonner';
-
-const API_BASE_URL = 'http://localhost:3000/api';
+import { API_BASE_URL } from '../../config/api';
 
 interface Transaction {
   id: string;

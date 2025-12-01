@@ -10,8 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar';
 import { useAuth } from '../AuthContext';
 import { toast } from 'sonner';
-
-const API_BASE_URL = 'http://localhost:3000/api';
+import { API_BASE_URL } from '../../config/api';
 
 export const AccountSettings: React.FC = () => {
   const { user, login } = useAuth();

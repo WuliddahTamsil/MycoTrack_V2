@@ -11,8 +11,7 @@ import { useAuth } from '../AuthContext';
 import { useCart } from '../CartContext';
 import { ImageWithFallback } from '../figma/ImageWithFallback';
 import { toast } from 'sonner';
-
-const API_BASE_URL = 'http://localhost:3000/api';
+import { API_BASE_URL } from '../../config/api';
 
 interface Order {
   id: string;

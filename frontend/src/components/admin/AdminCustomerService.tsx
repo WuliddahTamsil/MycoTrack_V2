@@ -6,8 +6,7 @@ import { Send, MessageCircle, Loader2, Users, Badge, User } from 'lucide-react';
 import { useAuth } from '../AuthContext';
 import { toast } from 'sonner';
 import { Avatar, AvatarFallback } from '../ui/avatar';
-
-const API_BASE_URL = 'http://localhost:3000/api';
+import { API_BASE_URL } from '../../config/api';
 
 interface Message {
   id: string;

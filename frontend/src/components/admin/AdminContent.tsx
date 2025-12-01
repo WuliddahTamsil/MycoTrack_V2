@@ -11,8 +11,7 @@ import { Label } from '../ui/label';
 import { Textarea } from '../ui/textarea';
 import { Plus, Edit, Trash2, Upload, Image as ImageIcon } from 'lucide-react';
 import { toast } from 'sonner';
-
-const API_BASE_URL = 'http://localhost:3000/api';
+import { API_BASE_URL } from '../../config/api';
 
 interface Article {
   id: string;

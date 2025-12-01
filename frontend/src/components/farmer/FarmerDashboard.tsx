@@ -14,8 +14,7 @@ import { AccountSettings } from '../shared/AccountSettings';
 import { ArticleList } from '../shared/ArticleList';
 import { ArticleDetail } from '../shared/ArticleDetail';
 import { useAuth } from '../AuthContext';
-
-const API_BASE_URL = 'http://localhost:3000/api';
+import { API_BASE_URL } from '../../config/api';
 
 type FarmerPage = 'monitoring' | 'history' | 'gallery' | 'products' | 'add-product' | 'orders' | 'balance' | 'forum' | 'help' | 'settings' | 'notifications' | 'articles' | 'article-detail';
 

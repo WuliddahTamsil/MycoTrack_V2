@@ -7,8 +7,9 @@ import { ShoppingCart, Search, Loader2, Headphones } from 'lucide-react';
 import { useCart } from '../CartContext';
 import { toast } from 'sonner';
 import { ImageWithFallback } from '../figma/ImageWithFallback';
+import { API_BASE_URL } from '../../config/api';
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = API_BASE_URL;
 
 interface Product {
   id: string;
@@ -42,7 +43,7 @@ export const CustomerMarketplace: React.FC<CustomerMarketplaceProps> = ({ onNavi
         setIsLoading(true);
         
         // Check backend health first
-        const healthCheck = await fetch('http://localhost:3000/api/health', {
+        const healthCheck = await fetch(`${API_URL}/health`, {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
         }).catch(() => null);

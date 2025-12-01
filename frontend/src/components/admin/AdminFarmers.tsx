@@ -6,8 +6,7 @@ import { Badge } from '../ui/badge';
 import { Edit, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
-
-const API_BASE_URL = 'http://localhost:3000/api';
+import { API_BASE_URL } from '../../config/api';
 
 interface Farmer {
   id: string;

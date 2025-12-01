@@ -4,8 +4,7 @@ import { ImageWithFallback } from '../figma/ImageWithFallback';
 import { Search } from 'lucide-react';
 import { Input } from '../ui/input';
 import { toast } from 'sonner';
-
-const API_BASE_URL = 'http://localhost:3000/api';
+import { API_BASE_URL } from '../../config/api';
 
 interface Article {
   id: string;

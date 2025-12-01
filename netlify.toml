@@ -1,0 +1,18 @@
+# Netlify Configuration for Backend
+# Note: Netlify is not ideal for Express backend
+# Consider using Vercel or Render instead
+
+[build]
+  base = "backend"
+  command = "npm install"
+  publish = "."
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# Redirect all requests to Express app
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/server"
+  status = 200
+

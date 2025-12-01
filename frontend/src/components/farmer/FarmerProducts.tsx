@@ -13,8 +13,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Plus, Edit, Trash2, Upload, Image as ImageIcon, AlertTriangle, X } from 'lucide-react';
 import { useAuth } from '../AuthContext';
 import { toast } from 'sonner';
+import { API_BASE_URL, getApiUrl } from '../../config/api';
 
-const API_URL = 'http://localhost:3000/api';
+const API_URL = API_BASE_URL;
 
 interface Product {
   id: string;
@@ -57,7 +58,7 @@ export const FarmerProducts = () => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 3000); // 3 second timeout
       
-      const response = await fetch('http://localhost:3000/api/health', {
+      const response = await fetch(getApiUrl('health'), {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
         signal: controller.signal
@@ -109,7 +110,7 @@ export const FarmerProducts = () => {
 
       if (!response.ok) {
         if (response.status === 404) {
-          throw new Error('Endpoint tidak ditemukan. Pastikan backend berjalan di http://localhost:3000 dan endpoint /api/petani/products tersedia.');
+          throw new Error('Endpoint tidak ditemukan. Pastikan backend berjalan dan endpoint /api/petani/products tersedia.');
         }
         const errorText = await response.text();
         let errorMessage = 'Gagal memuat produk';
@@ -134,7 +135,7 @@ export const FarmerProducts = () => {
           errorMessage = error.message;
         }
       } else {
-        errorMessage = 'Gagal memuat produk. Pastikan backend berjalan di http://localhost:3000';
+        errorMessage = 'Gagal memuat produk. Pastikan backend berjalan.';
       }
       toast.error(errorMessage, { duration: 8000 });
       setProducts([]);
@@ -272,7 +273,7 @@ export const FarmerProducts = () => {
         console.error('Error response:', errorText);
         
         if (response.status === 404) {
-          throw new Error('Endpoint tidak ditemukan. Pastikan backend berjalan di http://localhost:3000 dan endpoint POST /api/petani/products tersedia.');
+          throw new Error('Endpoint tidak ditemukan. Pastikan backend berjalan dan endpoint POST /api/petani/products tersedia.');
         }
         
         let errorMessage = 'Gagal menambahkan produk';
@@ -305,14 +306,14 @@ export const FarmerProducts = () => {
       
       if (error instanceof Error) {
         if (error.message.includes('404') || error.message.includes('not found') || error.message.includes('Endpoint')) {
-          errorMessage = 'Backend tidak berjalan atau endpoint tidak ditemukan. Pastikan backend berjalan di http://localhost:3000';
+          errorMessage = 'Backend tidak berjalan atau endpoint tidak ditemukan. Pastikan backend berjalan.';
         } else if (error.message.includes('Network') || error.message.includes('Failed to fetch')) {
-          errorMessage = 'Tidak dapat terhubung ke server. Pastikan backend berjalan di http://localhost:3000';
+          errorMessage = 'Tidak dapat terhubung ke server. Pastikan backend berjalan.';
         } else {
           errorMessage = error.message;
         }
       } else {
-        errorMessage = 'Gagal menambahkan produk. Pastikan backend berjalan di http://localhost:3000';
+        errorMessage = 'Gagal menambahkan produk. Pastikan backend berjalan.';
       }
       
       toast.error(errorMessage, { duration: 5000 });
@@ -447,14 +448,14 @@ export const FarmerProducts = () => {
       
       if (error instanceof Error) {
         if (error.message.includes('404') || error.message.includes('not found') || error.message.includes('Endpoint')) {
-          errorMessage = 'Backend tidak berjalan atau endpoint tidak ditemukan. Pastikan backend berjalan di http://localhost:3000';
+          errorMessage = 'Backend tidak berjalan atau endpoint tidak ditemukan. Pastikan backend berjalan.';
         } else if (error.message.includes('Network') || error.message.includes('Failed to fetch')) {
-          errorMessage = 'Tidak dapat terhubung ke server. Pastikan backend berjalan di http://localhost:3000';
+          errorMessage = 'Tidak dapat terhubung ke server. Pastikan backend berjalan.';
         } else {
           errorMessage = error.message;
         }
       } else {
-        errorMessage = 'Gagal memperbarui produk. Pastikan backend berjalan di http://localhost:3000';
+        errorMessage = 'Gagal memperbarui produk. Pastikan backend berjalan.';
       }
       
       toast.error(errorMessage, { duration: 5000 });
@@ -514,7 +515,7 @@ export const FarmerProducts = () => {
       }, 500);
     } catch (error) {
       console.error('Error deleting product:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Gagal menghapus produk. Pastikan backend berjalan di http://localhost:3000';
+      const errorMessage = error instanceof Error ? error.message : 'Gagal menghapus produk. Pastikan backend berjalan.';
       toast.error(errorMessage, { duration: 5000 });
     } finally {
       setIsLoading(false);

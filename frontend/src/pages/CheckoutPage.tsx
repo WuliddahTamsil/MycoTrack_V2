@@ -11,6 +11,7 @@ import { useCart } from '../components/CartContext';
 import { useAuth } from '../components/AuthContext';
 import { toast } from 'sonner';
 import { DashboardLayout } from '../components/shared/DashboardLayout';
+import { API_BASE_URL } from '../config/api';
 // QR Code component - simple dummy QR code
 const DummyQRCode: React.FC<{ value: string; size?: number }> = ({ value, size = 240 }) => {
   // Create a simple QR-like pattern
@@ -48,8 +49,6 @@ const DummyQRCode: React.FC<{ value: string; size?: number }> = ({ value, size =
     </svg>
   );
 };
-
-const API_BASE_URL = 'http://localhost:3000/api';
 
 type PaymentMethod = 'balance' | 'qris' | 'gopay' | 'ovo' | 'dana' | 'bank_transfer' | 'credit_card';
 
