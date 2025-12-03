@@ -265,7 +265,7 @@ export const LandingPage: React.FC = () => {
                 <div className="absolute -inset-4 gradient-autumn-hero opacity-20 rounded-3xl blur-2xl animate-pulse-soft"></div>
                 <div className="relative rounded-3xl overflow-hidden autumn-shadow-lg">
                   <ImageWithFallback 
-                    src="https://tribratanews.polri.go.id/web/image/blog.post/67506/image"
+                    src="/assets/team/myc.png"
                     alt="Budidaya Jamur Kuping" 
                     className="w-full h-full object-cover"
                   />
