@@ -12,8 +12,9 @@ from pathlib import Path
 # Project root
 PROJECT_ROOT = Path(__file__).parent.resolve()
 
-# Model path
-MODEL_PATH = str(PROJECT_ROOT / "weights" / "best.pt")
+# Model path - Using trained model from yolov5_new folder
+# Model yang sudah dilatih dengan baik untuk deteksi realtime live camera
+MODEL_PATH = str(PROJECT_ROOT / "yolov5_new" / "yolov5" / "runs" / "train" / "mushroom_custom" / "weights" / "best.pt")
 
 # ============================================================
 # DETECTION CONFIGURATION
@@ -26,7 +27,7 @@ WEBCAM_INDEX = 0  # 0 = default webcam, 1 = external webcam
 IMG_SIZE = 640  # 640x640 (default YOLOv5)
 
 # Confidence threshold
-CONFIDENCE_THRESHOLD = 0.15  # ✅ Turunkan untuk deteksi lebih sensitif (semakin rendah = lebih banyak deteksi)
+CONFIDENCE_THRESHOLD = 0.10  # ✅ Threshold rendah untuk deteksi lebih sensitif (semakin rendah = lebih banyak deteksi)
 
 # ============================================================
 # CLASS CONFIGURATION

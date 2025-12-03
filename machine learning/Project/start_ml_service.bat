@@ -27,12 +27,17 @@ if defined VIRTUAL_ENV (
 
 echo.
 echo [INFO] Memeriksa model...
-if not exist "weights\best.pt" (
-    echo [WARNING] Model weights\best.pt tidak ditemukan!
-    echo Pastikan model sudah di-training terlebih dahulu
-    echo Jalankan: python scripts\2_train_model.py
+if not exist "yolov5_new\yolov5\runs\train\mushroom_custom\weights\best.pt" (
+    echo [WARNING] Model yolov5_new\yolov5\runs\train\mushroom_custom\weights\best.pt tidak ditemukan!
+    echo Pastikan model sudah ada di folder tersebut
     echo.
-    pause
+    if exist "weights\best.pt" (
+        echo [INFO] Model lama ditemukan di weights\best.pt
+        echo [INFO] Tapi akan menggunakan model dari yolov5_new jika ada
+    )
+    echo.
+) else (
+    echo [OK] Model ditemukan: yolov5_new\yolov5\runs\train\mushroom_custom\weights\best.pt
 )
 
 echo.

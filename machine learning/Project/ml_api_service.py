@@ -312,17 +312,22 @@ def detect_upload():
         print(f"[DETECT/UPLOAD] Processed {len(detections)} detections")
         print(f"[DETECT/UPLOAD] Summary: {summary}")
         
-        # Draw detections on image
+        # Always draw detections (even if empty) for consistency
         img_with_boxes = draw_detections(image, detections)
         image_base64 = image_to_base64(img_with_boxes)
         
-        return jsonify({
+        # Always return success, even if no detections
+        response = {
             'success': True,
             'detections': detections,
             'summary': summary,
             'total_detections': len(detections),
             'image_with_detections': image_base64
-        })
+        }
+        
+        print(f"[DETECT/UPLOAD] Returning response: success={response['success']}, total_detections={response['total_detections']}")
+        
+        return jsonify(response)
         
     except Exception as e:
         print(f"Error in detection: {e}")

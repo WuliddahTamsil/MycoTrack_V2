@@ -1271,5 +1271,105 @@
       ]
     },
     "createdAt": "2025-12-01T05:20:17.572Z"
+  },
+  {
+    "id": "gallery-1764779281703-il93vjy52",
+    "farmerId": "petani-1763648620022",
+    "url": "/uploads/image-1764779280751-452870384.jpg",
+    "annotatedUrl": "/uploads/annotated-image-1764779280751-452870384.jpg",
+    "title": "Deteksi Jamur - 3/12/2025",
+    "description": "",
+    "date": "2025-12-03",
+    "baglogId": "Baglog #2",
+    "stage": "Panen",
+    "tags": [],
+    "detections": {
+      "summary": {
+        "Matang": 5,
+        "Muda": 1,
+        "Primordia": 1
+      },
+      "total": 7,
+      "details": [
+        {
+          "bbox": [
+            274,
+            147,
+            678,
+            602
+          ],
+          "class": "Matang",
+          "confidence": 0.44285255670547485,
+          "harvest_days": 0
+        },
+        {
+          "bbox": [
+            178,
+            822,
+            274,
+            919
+          ],
+          "class": "Muda",
+          "confidence": 0.40595346689224243,
+          "harvest_days": 2
+        },
+        {
+          "bbox": [
+            238,
+            891,
+            281,
+            937
+          ],
+          "class": "Primordia",
+          "confidence": 0.3439868092536926,
+          "harvest_days": 4
+        },
+        {
+          "bbox": [
+            20,
+            21,
+            343,
+            429
+          ],
+          "class": "Matang",
+          "confidence": 0.3011091947555542,
+          "harvest_days": 0
+        },
+        {
+          "bbox": [
+            187,
+            533,
+            623,
+            848
+          ],
+          "class": "Matang",
+          "confidence": 0.3001255691051483,
+          "harvest_days": 0
+        },
+        {
+          "bbox": [
+            265,
+            11,
+            361,
+            117
+          ],
+          "class": "Matang",
+          "confidence": 0.24756471812725067,
+          "harvest_days": 0
+        },
+        {
+          "bbox": [
+            229,
+            39,
+            360,
+            178
+          ],
+          "class": "Matang",
+          "confidence": 0.23715128004550934,
+          "harvest_days": 0
+        }
+      ]
+    },
+    "createdAt": "2025-12-03T16:28:01.703Z"
   }
 ]

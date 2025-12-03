@@ -45,6 +45,10 @@ export const FarmerMonitoring: React.FC = () => {
   
   // Live Camera states
   const [isCameraActive, setIsCameraActive] = useState(false);
+  const [isLiveDetecting, setIsLiveDetecting] = useState(false);
+  const [fps, setFps] = useState(0);
+  const detectionIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const fpsCalcRef = useRef({ frameCount: 0, startTime: Date.now() });
   
   // Detected growth phase (sinkron dengan hasil deteksi)
   const [detectedPhase, setDetectedPhase] = useState<string | null>(null);
@@ -71,8 +75,22 @@ export const FarmerMonitoring: React.FC = () => {
   useEffect(() => {
     return () => {
       stopCamera();
+      stopLiveDetection();
     };
   }, []);
+
+  // Live detection loop
+  useEffect(() => {
+    if (isLiveDetecting && isCameraActive && videoRef.current) {
+      startLiveDetection();
+    } else {
+      stopLiveDetection();
+    }
+
+    return () => {
+      stopLiveDetection();
+    };
+  }, [isLiveDetecting, isCameraActive]);
 
   const latestData = sensorData[sensorData.length - 1];
 
@@ -104,41 +122,6 @@ export const FarmerMonitoring: React.FC = () => {
     reader.readAsDataURL(file);
   };
 
-  const captureFromWebcam = () => {
-    if (videoRef.current && canvasRef.current) {
-      const canvas = canvasRef.current;
-      const video = videoRef.current;
-      
-      // Pastikan video sudah ready
-      if (video.readyState < 2) {
-        console.warn('Video not ready yet, readyState:', video.readyState);
-        return;
-      }
-      
-      // Set canvas dimensions to match video
-      const videoWidth = video.videoWidth || 640;
-      const videoHeight = video.videoHeight || 480;
-      canvas.width = videoWidth;
-      canvas.height = videoHeight;
-      
-      const ctx = canvas.getContext('2d');
-      if (ctx) {
-        // Draw video frame to canvas
-        ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
-        
-        // Convert to base64
-        const imageData = canvas.toDataURL('image/jpeg', 0.95);
-        console.log('Frame captured, size:', imageData.length, 'bytes');
-        setCurrentImage(imageData);
-        setDetectionResults(null);
-        return true;
-      }
-    } else {
-      console.error('Video or canvas ref is null');
-    }
-    return false;
-  };
-
   // Handle mode change
   const handleModeChange = (mode: 'upload' | 'camera') => {
     if (mode === detectionMode) return;
@@ -160,14 +143,118 @@ export const FarmerMonitoring: React.FC = () => {
   // Start camera
   const startCamera = async () => {
     try {
+      // Check if browser supports getUserMedia
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        throw new Error('BROWSER_NOT_SUPPORTED');
+      }
+
+      // Check if running on HTTPS or localhost
+      const isSecure = window.location.protocol === 'https:' || 
+                       window.location.hostname === 'localhost' || 
+                       window.location.hostname === '127.0.0.1';
+      
+      if (!isSecure) {
+        toast.error(
+          <div>
+            <p className="font-bold mb-1">⚠️ HTTPS Diperlukan</p>
+            <p className="text-sm">Akses kamera memerlukan koneksi HTTPS yang aman.</p>
+            <p className="text-sm mt-1">Gunakan localhost atau deploy dengan HTTPS.</p>
+          </div>,
+          { duration: 6000 }
+        );
+        return;
+      }
+
       console.log('Starting camera...');
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { 
-          width: { ideal: 1280 },
-          height: { ideal: 720 },
-          facingMode: 'user' // Use front camera on desktop
-        } 
-      });
+      
+      // Try to get camera stream
+      let stream: MediaStream | null = null;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ 
+          video: { 
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+            facingMode: 'user' // Use front camera on desktop
+          } 
+        });
+      } catch (getUserMediaError: any) {
+        // Handle specific error types
+        const errorName = getUserMediaError?.name || 'UnknownError';
+        const errorMessage = getUserMediaError?.message || '';
+        
+        console.error('getUserMedia error:', errorName, errorMessage);
+        
+        if (errorName === 'NotAllowedError' || errorName === 'PermissionDeniedError') {
+          toast.error(
+            <div>
+              <p className="font-bold mb-2">🔒 Izin Kamera Ditolak</p>
+              <p className="text-sm mb-2">Ikuti langkah berikut untuk mengizinkan akses kamera:</p>
+              <ol className="text-sm list-decimal list-inside space-y-1 ml-2">
+                <li>Klik ikon gembok/kamera di address bar</li>
+                <li>Izinkan akses ke kamera</li>
+                <li>Refresh halaman dan coba lagi</li>
+              </ol>
+            </div>,
+            { duration: 8000 }
+          );
+          setIsCameraActive(false);
+          return;
+        } else if (errorName === 'NotFoundError' || errorName === 'DevicesNotFoundError') {
+          toast.error(
+            <div>
+              <p className="font-bold mb-1">📷 Kamera Tidak Ditemukan</p>
+              <p className="text-sm">Tidak ada kamera yang terdeteksi pada perangkat Anda.</p>
+              <p className="text-sm mt-1">Pastikan kamera terhubung dan tidak digunakan aplikasi lain.</p>
+            </div>,
+            { duration: 6000 }
+          );
+          setIsCameraActive(false);
+          return;
+        } else if (errorName === 'NotReadableError' || errorName === 'TrackStartError') {
+          toast.error(
+            <div>
+              <p className="font-bold mb-2">⚠️ Kamera Sedang Digunakan</p>
+              <p className="text-sm mb-2">Kamera sedang digunakan oleh aplikasi lain:</p>
+              <ul className="text-sm list-disc list-inside space-y-1 ml-2">
+                <li>Tutup aplikasi lain yang menggunakan kamera (Zoom, Teams, dll)</li>
+                <li>Tutup tab browser lain yang menggunakan kamera</li>
+                <li>Restart browser jika masih bermasalah</li>
+              </ul>
+            </div>,
+            { duration: 8000 }
+          );
+          setIsCameraActive(false);
+          return;
+        } else if (errorName === 'OverconstrainedError' || errorName === 'ConstraintNotSatisfiedError') {
+          // Try with simpler constraints
+          console.log('Trying with simpler video constraints...');
+          try {
+            stream = await navigator.mediaDevices.getUserMedia({ 
+              video: true // Use default settings
+            });
+          } catch (fallbackError: any) {
+            toast.error(
+              <div>
+                <p className="font-bold mb-1">⚠️ Pengaturan Kamera Tidak Didukung</p>
+                <p className="text-sm">Kamera tidak mendukung pengaturan yang diminta.</p>
+                <p className="text-sm mt-1">Coba gunakan mode Upload Foto sebagai alternatif.</p>
+              </div>,
+              { duration: 6000 }
+            );
+            setIsCameraActive(false);
+            return;
+          }
+        } else {
+          // For other errors, throw to outer catch block
+          throw getUserMediaError;
+        }
+      }
+      
+      // If we still don't have a stream at this point, return early
+      if (!stream) {
+        setIsCameraActive(false);
+        return;
+      }
       
       console.log('Camera stream obtained:', stream);
       
@@ -186,26 +273,72 @@ export const FarmerMonitoring: React.FC = () => {
           videoRef.current.play()
             .then(() => {
               console.log('Video is playing');
-              toast.success('Kamera berhasil diaktifkan');
+              toast.success('✅ Kamera berhasil diaktifkan!');
             })
             .catch(err => {
               console.error('Error playing video:', err);
-              toast.error('Gagal memutar video. Coba refresh halaman.');
+              setIsCameraActive(false);
+              stream.getTracks().forEach(track => track.stop());
+              toast.error(
+                <div>
+                  <p className="font-bold mb-1">⚠️ Gagal Memutar Video</p>
+                  <p className="text-sm">Coba refresh halaman atau restart browser.</p>
+                </div>,
+                { duration: 5000 }
+              );
             });
         } else {
           console.error('Video ref is null');
+          stream.getTracks().forEach(track => track.stop());
+          setIsCameraActive(false);
         }
       }, 100);
       
     } catch (error: any) {
       console.error('Error accessing camera:', error);
       setIsCameraActive(false);
-      toast.error('Gagal mengakses kamera. Pastikan izin kamera sudah diberikan.');
+      
+      const errorType = error?.message || error?.name || 'UNKNOWN';
+      
+      if (errorType === 'BROWSER_NOT_SUPPORTED') {
+        toast.error(
+          <div>
+            <p className="font-bold mb-1">⚠️ Browser Tidak Mendukung</p>
+            <p className="text-sm">Browser Anda tidak mendukung akses kamera.</p>
+            <p className="text-sm mt-1">Gunakan Chrome, Firefox, Edge, atau Safari versi terbaru.</p>
+          </div>,
+          { duration: 6000 }
+        );
+      } else if (errorType === 'CONSTRAINT_ERROR') {
+        toast.error(
+          <div>
+            <p className="font-bold mb-1">⚠️ Pengaturan Kamera Tidak Didukung</p>
+            <p className="text-sm">Kamera tidak mendukung pengaturan yang diminta.</p>
+            <p className="text-sm mt-1">Coba gunakan mode Upload Foto sebagai alternatif.</p>
+          </div>,
+          { duration: 6000 }
+        );
+      } else {
+        toast.error(
+          <div>
+            <p className="font-bold mb-2">❌ Gagal Mengakses Kamera</p>
+            <p className="text-sm mb-2">Coba langkah berikut:</p>
+            <ul className="text-sm list-disc list-inside space-y-1 ml-2">
+              <li>Pastikan izin kamera sudah diberikan di browser</li>
+              <li>Periksa apakah kamera tidak digunakan aplikasi lain</li>
+              <li>Refresh halaman dan coba lagi</li>
+              <li>Gunakan mode Upload Foto sebagai alternatif</li>
+            </ul>
+          </div>,
+          { duration: 8000 }
+        );
+      }
     }
   };
 
   // Stop camera
   const stopCamera = () => {
+    stopLiveDetection(); // Stop live detection first
     if (videoRef.current && videoRef.current.srcObject) {
       const stream = videoRef.current.srcObject as MediaStream;
       stream.getTracks().forEach(track => track.stop());
@@ -213,6 +346,163 @@ export const FarmerMonitoring: React.FC = () => {
       setIsCameraActive(false);
       setCurrentImage(null);
       setDetectionResults(null);
+    }
+  };
+
+  // Start live detection
+  const startLiveDetection = () => {
+    if (detectionIntervalRef.current) {
+      clearInterval(detectionIntervalRef.current);
+    }
+
+    console.log('[Live Detection] Starting live detection interval...');
+    setIsLiveDetecting(true);
+    fpsCalcRef.current = { frameCount: 0, startTime: Date.now() };
+
+    // Perform detection every 500ms (2 FPS detection rate to avoid overwhelming the API)
+    detectionIntervalRef.current = setInterval(async () => {
+      if (!videoRef.current || !isCameraActive) {
+        console.warn('[Live Detection] Skipping - video not ready or camera not active');
+        return;
+      }
+
+      await performLiveDetection();
+    }, 500); // 500ms = 2 detections per second
+    
+    console.log('[Live Detection] Interval started - will detect every 500ms');
+  };
+
+  // Stop live detection
+  const stopLiveDetection = () => {
+    if (detectionIntervalRef.current) {
+      clearInterval(detectionIntervalRef.current);
+      detectionIntervalRef.current = null;
+    }
+    setIsLiveDetecting(false);
+    setFps(0);
+    fpsCalcRef.current = { frameCount: 0, startTime: Date.now() };
+  };
+
+  // Perform live detection on current video frame
+  const performLiveDetection = async () => {
+    if (!videoRef.current || !canvasRef.current || isDetecting) {
+      return;
+    }
+
+    try {
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+
+      // Check if video is ready
+      if (video.readyState < 2) {
+        return;
+      }
+
+      // Set canvas dimensions to match video
+      const videoWidth = video.videoWidth || 640;
+      const videoHeight = video.videoHeight || 480;
+      canvas.width = videoWidth;
+      canvas.height = videoHeight;
+
+      // Draw video frame to canvas
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
+
+      // Convert to blob
+      canvas.toBlob(async (blob) => {
+        if (!blob) {
+          console.warn('[Live Detection] Failed to create blob from canvas');
+          return;
+        }
+
+        setIsDetecting(true);
+        
+        try {
+          const formData = new FormData();
+          formData.append('image', blob, 'frame.jpg');
+
+          const mlApiUrl = getMlApiUrl('detect');
+          console.log('[Live Detection] Sending frame to:', mlApiUrl);
+          console.log('[Live Detection] Blob size:', blob.size, 'bytes');
+
+          const res = await fetch(mlApiUrl, {
+            method: 'POST',
+            body: formData
+          });
+
+          console.log('[Live Detection] Response status:', res.status, res.statusText);
+
+          if (!res.ok) {
+            const errorText = await res.text();
+            console.error('[Live Detection] Error response:', errorText);
+            throw new Error(`HTTP ${res.status}: ${errorText.substring(0, 100)}`);
+          }
+
+          const data = await res.json();
+          console.log('[Live Detection] Response data:', {
+            success: data.success,
+            detectionsCount: data.detections?.length || 0,
+            summary: data.summary
+          });
+
+          if (data.success !== false) {
+            // Always set results, even if empty
+            setDetectionResults(data);
+            
+            // Update FPS calculation
+            fpsCalcRef.current.frameCount++;
+            const elapsed = (Date.now() - fpsCalcRef.current.startTime) / 1000;
+            if (elapsed >= 1) {
+              setFps(fpsCalcRef.current.frameCount / elapsed);
+              fpsCalcRef.current = { frameCount: 0, startTime: Date.now() };
+            }
+
+            // Update detected phase
+            if (data.detections && data.detections.length > 0) {
+              const phaseCounts = {
+                'Primordia': data.summary?.Primordia || 0,
+                'Muda': data.summary?.Muda || 0,
+                'Matang': data.summary?.Matang || 0
+              };
+              
+              let dominantPhase = 'Pertumbuhan';
+              const maxCount = Math.max(phaseCounts.Primordia, phaseCounts.Muda, phaseCounts.Matang);
+              
+              if (maxCount > 0) {
+                if (phaseCounts.Matang > 0 && phaseCounts.Matang >= phaseCounts.Muda && phaseCounts.Matang >= phaseCounts.Primordia) {
+                  dominantPhase = 'Matang (Siap Panen)';
+                } else if (phaseCounts.Muda > 0 && phaseCounts.Muda >= phaseCounts.Primordia) {
+                  dominantPhase = 'Muda';
+                } else if (phaseCounts.Primordia > 0) {
+                  dominantPhase = 'Primordia';
+                }
+              }
+              
+              setDetectedPhase(dominantPhase);
+            } else {
+              // No detections - clear results but keep state
+              setDetectedPhase(null);
+            }
+          } else {
+            console.error('[Live Detection] Detection failed:', data.error);
+          }
+        } catch (error: any) {
+          console.error('[Live Detection] Error:', error);
+          // Only log error, don't show toast to avoid spam in live mode
+          // But show first error as warning
+          if (!error.logged) {
+            console.warn('[Live Detection] First error occurred - check browser console and ML service logs');
+            error.logged = true;
+          }
+        } finally {
+          setIsDetecting(false);
+        }
+      }, 'image/jpeg', 0.85);
+    } catch (error) {
+      console.error('Error capturing frame:', error);
+      setIsDetecting(false);
     }
   };
 
@@ -592,12 +882,12 @@ export const FarmerMonitoring: React.FC = () => {
                   await new Promise(resolve => setTimeout(resolve, 50));
                   startCamera();
                 }}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-6 text-lg shadow-lg"
+                className="w-full bg-blue-600 hover:bg-blue-700 font-bold py-6 text-lg shadow-lg"
                 size="lg"
-                style={{ color: '#ffffff' }}
+                style={{ color: '#dc2626' }}
               >
-                <Video className="h-6 w-6 mr-3" style={{ color: '#ffffff' }} />
-                <span style={{ color: '#ffffff', fontWeight: 'bold' }}>Aktifkan Kamera Laptop</span>
+                <Video className="h-6 w-6 mr-3" style={{ color: '#dc2626' }} />
+                <span style={{ color: '#dc2626', fontWeight: 'bold' }}>Aktifkan Kamera Laptop</span>
               </Button>
             </div>
           )}
@@ -608,55 +898,42 @@ export const FarmerMonitoring: React.FC = () => {
               <div className="flex items-center justify-center gap-2 mb-4 p-3 bg-green-100 dark:bg-green-900/40 rounded-lg">
                 <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                 <p className="text-sm font-semibold text-green-800 dark:text-green-300">
-                  Kamera Aktif - Arahkan kamera ke jamur, lalu jepret foto
+                  {isLiveDetecting 
+                    ? '🔴 Live Detection Aktif - Deteksi berjalan secara real-time' 
+                    : 'Kamera Aktif - Aktifkan Live Detection untuk deteksi otomatis'}
                 </p>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <Button
-                  onClick={async () => {
-                    if (!videoRef.current || videoRef.current.readyState < 2) {
-                      toast.error('Video belum siap. Tunggu sebentar dan coba lagi.');
-                      return;
-                    }
-                    const captured = captureFromWebcam();
-                    if (captured) {
-                      toast.success('Foto berhasil diambil! Klik "Deteksi Sekarang" untuk mendeteksi jamur.');
-                    } else {
-                      toast.error('Gagal mengambil foto dari kamera');
-                    }
-                  }}
-                  disabled={isDetecting}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-md"
-                  size="lg"
-                  style={{ color: '#ffffff' }}
-                >
-                  <Camera className="h-5 w-5 mr-2" style={{ color: '#ffffff' }} />
-                  <span style={{ color: '#ffffff', fontWeight: 'bold' }}>Jepret Foto</span>
-                </Button>
-                <Button
-                  onClick={async () => {
-                    if (!currentImage) {
-                      toast.error('Jepret foto terlebih dahulu!');
-                      return;
-                    }
-                    runDetection();
-                  }}
-                  disabled={!currentImage || isDetecting}
-                  className="bg-[#B82601] hover:bg-[#C83611] text-white font-semibold shadow-md"
-                  size="lg"
-                >
-                  {isDetecting ? (
-                    <>
-                      <Square className="h-5 w-5 mr-2 animate-spin" />
-                      Detecting...
-                    </>
-                  ) : (
-                    <>
-                      <Camera className="h-5 w-5 mr-2" />
-                      Deteksi Sekarang
-                    </>
-                  )}
-                </Button>
+              
+              {/* Live Detection Controls */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                {!isLiveDetecting ? (
+                  <Button
+                    onClick={() => {
+                      console.log('[Live Detection] Button clicked - starting live detection...');
+                      startLiveDetection();
+                      toast.success('Live Detection diaktifkan! Deteksi akan berjalan otomatis.');
+                    }}
+                    className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 font-bold shadow-lg"
+                    size="lg"
+                    style={{ color: '#dc2626' }}
+                  >
+                    <Video className="h-5 w-5 mr-2" style={{ color: '#dc2626' }} />
+                    <span style={{ color: '#dc2626' }}>Mulai Live Detection</span>
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => {
+                      console.log('[Live Detection] Button clicked - stopping live detection...');
+                      stopLiveDetection();
+                      toast.info('Live Detection dihentikan.');
+                    }}
+                    className="bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 font-bold shadow-lg"
+                    size="lg"
+                  >
+                    <Square className="h-5 w-5 mr-2" style={{ color: '#ffffff', filter: 'drop-shadow(0 0 2px #dc2626)' }} />
+                    <span style={{ color: '#ffffff', fontWeight: 'bold', textShadow: '2px 2px 4px rgba(220, 38, 38, 1)' }}>Hentikan Live Detection</span>
+                  </Button>
+                )}
                 <Button
                   onClick={stopCamera}
                   variant="outline"
@@ -667,10 +944,12 @@ export const FarmerMonitoring: React.FC = () => {
                   Matikan Kamera
                 </Button>
               </div>
-              {currentImage && (
-                <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-300 dark:border-blue-700 rounded-lg text-center">
-                  <p className="text-sm text-blue-700 dark:text-blue-300 font-medium">
-                    ✅ Foto sudah diambil. Klik "Deteksi Sekarang" untuk mendeteksi jamur.
+
+              {/* FPS Counter */}
+              {isLiveDetecting && fps > 0 && (
+                <div className="mt-3 p-2 bg-gray-800 text-white rounded-lg text-center">
+                  <p className="text-sm font-semibold">
+                    FPS: <span className="text-green-400 font-bold">{fps.toFixed(1)}</span>
                   </p>
                 </div>
               )}
@@ -724,12 +1003,19 @@ export const FarmerMonitoring: React.FC = () => {
                   </div>
                 )}
                 
-                {/* Live status indicator */}
+                {/* Live status indicator and FPS */}
                 {videoRef.current && videoRef.current.readyState >= 2 && (
-                  <div className="absolute top-2 left-2 sm:top-4 sm:left-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs font-bold z-20 shadow-lg flex items-center gap-2 animate-pulse">
-                    <div className="w-2 h-2 bg-white rounded-full"></div>
-                    <span className="hidden sm:inline">🎥 Live</span>
-                    <span className="sm:hidden">🎥</span>
+                  <div className="absolute top-2 left-2 sm:top-4 sm:left-4 z-20 flex flex-col gap-2">
+                    <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs font-bold shadow-lg flex items-center gap-2 animate-pulse">
+                      <div className="w-2 h-2 bg-white rounded-full"></div>
+                      <span className="hidden sm:inline">🎥 Live</span>
+                      <span className="sm:hidden">🎥</span>
+                    </div>
+                    {isLiveDetecting && fps > 0 && (
+                      <div className="bg-black/80 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-lg">
+                        FPS: <span className="text-green-400">{fps.toFixed(1)}</span>
+                      </div>
+                    )}
                   </div>
                 )}
                 
@@ -936,8 +1222,9 @@ export const FarmerMonitoring: React.FC = () => {
                           💡 Setelah kamera aktif:
                         </p>
                         <ul className="text-xs text-blue-700 dark:text-blue-400 text-left space-y-1">
-                          <li>• Jepret foto dari kamera laptop</li>
-                          <li>• Klik "Deteksi Sekarang" untuk mendeteksi jamur</li>
+                          <li>• Klik "Mulai Live Detection" untuk deteksi otomatis real-time</li>
+                          <li>• Deteksi akan berjalan secara kontinyu dan menampilkan hasil langsung</li>
+                          <li>• Arahkan kamera ke jamur untuk melihat deteksi fase pertumbuhan</li>
                         </ul>
                       </div>
                     </>
